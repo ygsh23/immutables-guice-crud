@@ -5,7 +5,11 @@ import com.google.inject.Provides;
 
 import javax.sql.DataSource;
 import org.mariadb.jdbc.MariaDbDataSource;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +24,29 @@ public class UserModule extends AbstractModule {
     }
 
     @Provides
-    public DataSource provideDataSource() {
+    public DataSource provideDataSource() throws IOException {
         MariaDbDataSource dataSource = new MariaDbDataSource();
+        Properties properties = loadProperties();
+
         try {
-            dataSource.setUrl("jdbc:mariadb://localhost:3306/user_db");
-            dataSource.setUser("root");
-            dataSource.setPassword("11223344");
+            dataSource.setUrl(properties.getProperty("db.url"));
+            dataSource.setUser(properties.getProperty("db.user"));
+            dataSource.setPassword(properties.getProperty("db.password"));
         } catch (SQLException e) {
             log.error("Failed to configure DataSource", e);
         }
         return dataSource;
+    }
+
+    private Properties loadProperties() throws IOException {
+        Properties properties = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                log.error("Sorry, unable to find application.properties");
+                return properties;
+            }
+            properties.load(input);
+        }
+        return properties;
     }
 }
