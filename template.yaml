@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+  UserLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: com.example.UserLambdaHandler::handleRequest
+      Runtime: java17
+      CodeUri: target/immutables-guice-crud-1.0-SNAPSHOT.jar
+      MemorySize: 512
+      Timeout: 10
