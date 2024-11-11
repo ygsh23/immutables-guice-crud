@@ -30,7 +30,7 @@ jobs:
         run: mvn clean install
 
       - name: Upload target directory
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: target
           path: target/
@@ -56,7 +56,7 @@ jobs:
           curl -u "sqa_b785980520b33df3a858c4828e77c90a8ad5484e:" -X GET "http://localhost:9000/api/qualitygates/project_status?projectKey=com.example" -o quality_gate_status.json
 
       - name: Upload SonarQube reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: sonar-reports
           path: |
