@@ -20,7 +20,7 @@ public class UserResource {
     }
 
     @POST
-    public Response createUser(User user) {
+    public Response createUser(ImmutableUser user) {
         userDao.createUser(user);
         return Response.status(Response.Status.CREATED).entity(user).build();
     }
@@ -28,13 +28,13 @@ public class UserResource {
     @GET
     @Path("/{id}")
     public Response getUser(@PathParam("id") String id) {
-        Optional<User> user = userDao.getUserById(id);
+        Optional<ImmutableUser> user = userDao.getUserById(id);
         return user.map(u -> Response.ok(u).build())
                 .orElseGet(() -> Response.status(Response.Status.NOT_FOUND).build());
     }
 
     @GET
-    public List<User> getAllUsers() {
+    public List<ImmutableUser> getAllUsers() {
         return userDao.getAllUsers();
     }
 

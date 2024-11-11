@@ -19,7 +19,7 @@ public class App {
 
         try{
             Tomcat tomcat = new Tomcat();
-            tomcat.setPort(9000);
+            tomcat.setPort(8080);
 
             File base = new File(System.getProperty("java.io.tmpdir"));
             tomcat.setBaseDir(base.getAbsolutePath());
