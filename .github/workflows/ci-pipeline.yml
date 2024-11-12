@@ -19,14 +19,14 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: 'adoptopenjdk'
+          distribution: 'temurin'
 
       - name: Set up Maven
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           maven-version: '3.6.3'
-          distribution: 'adoptopenjdk'
+          distribution: 'temurin'
 
       - name: Build project
         run: mvn clean install
@@ -48,7 +48,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: 'adoptopenjdk'
+          distribution: 'temurin'
 
       - name: Run SonarQube analysis
         run: mvn sonar:sonar
