@@ -45,8 +45,8 @@ jobs:
 
       - name: Fetch SonarQube report
         run: |
-          curl -u "sqa_b785980520b33df3a858c4828e77c90a8ad5484e:" -X GET "http://localhost:9000/api/issues/search?componentKeys=com.example&ps=500" -o sonar_report.json
-          curl -u "sqa_b785980520b33df3a858c4828e77c90a8ad5484e:" -X GET "http://localhost:9000/api/qualitygates/project_status?projectKey=com.example" -o quality_gate_status.json
+          curl.exe -u "sqa_b785980520b33df3a858c4828e77c90a8ad5484e:" -X GET "http://localhost:9000/api/issues/search?componentKeys=com.example&ps=500" -o sonar_report.json
+          curl.exe -u "sqa_b785980520b33df3a858c4828e77c90a8ad5484e:" -X GET "http://localhost:9000/api/qualitygates/project_status?projectKey=com.example" -o quality_gate_status.json
 
       - name: Upload SonarQube reports
         uses: actions/upload-artifact@v3
