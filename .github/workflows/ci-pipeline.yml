@@ -34,6 +34,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Download target directory
+        uses: actions/download-artifact@v3
+        with:
+          name: target
+          path: target/
+
       - name: Run SonarQube analysis
         run: mvn sonar:sonar
 
