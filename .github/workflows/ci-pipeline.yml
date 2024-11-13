@@ -88,7 +88,12 @@ jobs:
           sam local invoke UserLambda --event event.json 
           
           # > result.txt
-          echo "Exit Code: $LASTEXITCODE"
+
+          # Capture the exit code after invoking
+          $exitCode = $LASTEXITCODE
+          
+          # Print exit code to the GitHub Actions log
+          Write-Host "Exit Code: $exitCode"
 
 
           if ($LASTEXITCODE -ne 0) {
