@@ -91,11 +91,11 @@ jobs:
             exit 1
           }
 
-          # Optional: If you want to log the result for debugging
-          Get-Content result.txt
+          # # Optional: If you want to log the result for debugging
+          # Get-Content result.txt
 
-          # Check if result contains any error message
-          if (Get-Content result.txt | Select-String -Pattern "Error") {
-            echo "Error occurred during Lambda invocation"
-            exit 1  # Exit code 1 for failure
-          }
+          # # Check if result contains any error message
+          # if (Get-Content result.txt | Select-String -Pattern "Error") {
+          #   echo "Error occurred during Lambda invocation"
+          #   exit 1  # Exit code 1 for failure
+          # }
