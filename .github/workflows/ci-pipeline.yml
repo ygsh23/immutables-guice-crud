@@ -91,5 +91,5 @@ jobs:
           if (Get-Content result.txt | Select-String -Pattern "Lambda function executed successfully") {           
             exit 0
           } else {
-            exit
+            exit 1
           }
