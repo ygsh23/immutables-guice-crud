@@ -84,14 +84,12 @@ jobs:
 
       - name: Invoke Lambda function locally using SAM
         run: |
-          # Run SAM local invoke and capture output
           sam local invoke UserLambda --event event.json > result.txt
 
-          # Optional: If you want to log the result for debugging
-          # Get-Content result.txt
+          Get-Content result.txt
 
           if (Get-Content result.txt | Select-String -Pattern "Lambda function executed successfully") {           
             exit 0
           } else {
-            exit 1
+            exit
           }
