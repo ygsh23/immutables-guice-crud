@@ -15,7 +15,14 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
     @Override
     public String handleRequest(Map<String, Object> event, Context context) {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-        Callable<String> task = () -> processRequest(event, context);
+
+        Callable<String> task = () -> {
+            try {
+                return processRequest(event, context);
+            } catch (IllegalArgumentException e) {
+                return errorResponse(e.getMessage());
+            }
+        };
 
         Future<String> future = executorService.submit(task);
         String result;
@@ -23,10 +30,10 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
         try {
             result = future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
-            result = "Error: The request timed out. Please try again later.";
+            result = errorResponse("The request timed out. Please try again later.");
             context.getLogger().log("TimeoutException: " + e.getMessage());
         } catch (Exception e) {
-            result = "Error: An unexpected error occurred.";
+            result = errorResponse("An unexpected error occurred.");
             context.getLogger().log("Exception: " + e.getMessage());
         } finally {
             executorService.shutdown();
@@ -40,30 +47,30 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
             Thread.sleep(1000); // 5-second delay
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return "Error: Interrupted exception during processing.";
+            throw new IllegalStateException("Error: Interrupted exception during processing.");
         }
 
         if (event == null || event.isEmpty()) {
-            return errorResponse("Input JSON is missing.");
+            throw new IllegalArgumentException("Input JSON is missing.");
         }
 
         if (!event.containsKey("username")) {
-            return errorResponse("Field 'username' is required.");
+            throw new IllegalArgumentException("Field 'username' is required.");
         }
         String username = event.get("username").toString().trim();
         if (username.isEmpty()) {
-            return errorResponse("Field 'username' cannot be empty.");
+            throw new IllegalArgumentException("Field 'username' cannot be empty.");
         }
 
         if (!event.containsKey("email")) {
-            return errorResponse("Field 'email' is required.");
+            throw new IllegalArgumentException("Field 'email' is required.");
         }
         String email = event.get("email").toString().trim();
         if (email.isEmpty()) {
-            return errorResponse("Field 'email' cannot be empty.");
+            throw new IllegalArgumentException("Field 'email' cannot be empty.");
         }
         if (!EMAIL_PATTERN.matcher(email).matches()) {
-            return errorResponse("Field 'email' is not in a valid format.");
+            throw new IllegalArgumentException("Field 'email' is not in a valid format.");
         }
 
         for (String key : event.keySet()) {
