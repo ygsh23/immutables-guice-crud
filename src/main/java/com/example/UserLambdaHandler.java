@@ -81,9 +81,11 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
 
         String welcomeMessage = "Welcome, " + username + "! A confirmation email has been sent to " + email + ".";
         context.getLogger().log(welcomeMessage);
-        System.out.println("")
-        System.out.println("Lambda function executed successfully")
-        System.out.println("")
+        
+        System.out.println("");
+        System.out.println("Lambda function executed successfully");
+        System.out.println("");
+        
         context.getLogger().log("Lambda function executed successfully");
 
         return welcomeMessage;
