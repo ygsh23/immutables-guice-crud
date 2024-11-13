@@ -88,12 +88,7 @@ jobs:
           sam local invoke UserLambda --event event.json > result.txt
 
           # Check if SAM invocation failed (non-zero exit code)
-          if ($?) {
-            # No error
-            echo "Lambda invoked successfully !!!!!!!!!!!!!!!!!!!!!!!!!!!!!."
-            echo "Lambda invoked successfully."
-          } else {
-            # Exit with code 1 if SAM invocation fails
+          if (!$?) {
             echo "Error: Lambda invocation failed."
             exit 1
           }
