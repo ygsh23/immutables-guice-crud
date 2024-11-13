@@ -87,9 +87,7 @@ jobs:
           # Run SAM local invoke and capture output
           sam local invoke UserLambda --event event.json > result.txt
 
-          # Check if SAM invocation failed (non-zero exit code)
           if (!$?) {
-            echo "Error: Lambda invocation failed."
             exit 1
           }
 
