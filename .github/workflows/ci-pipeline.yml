@@ -85,7 +85,7 @@ jobs:
       - name: Invoke Lambda function locally using SAM
         run: |
           # Run SAM local invoke and capture output
-          sam local invoke UserLambda --event event.json 
+          sam local invoke UserLambda --event event.json --debug
           
           # > result.txt
 
