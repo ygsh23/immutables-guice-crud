@@ -85,31 +85,13 @@ jobs:
       - name: Invoke Lambda function locally using SAM
         run: |
           # Run SAM local invoke and capture output
-          sam local invoke UserLambda --event event.json --debug
-          
-          # > result.txt
+          sam local invoke UserLambda --event event.json > result.txt
 
-          # Capture the exit code after invoking
-          $exitCode = $LASTEXITCODE
-          
-          # Print exit code to the GitHub Actions log
-          Write-Host "Exit Code: $exitCode"
+          # Optional: If you want to log the result for debugging
+          Get-Content result.txt
 
-
-          if ($LASTEXITCODE -ne 0) {
-          echo "Error: Lambda invocation failed."
-          exit 1  # Exit with code 1 if invocation failed
-           }
-
-          # if (!$?) {
-          #   exit 1
-          # }
-
-          # # Optional: If you want to log the result for debugging
-          # Get-Content result.txt
-
-          # # Check if result contains any error message
-          # if (Get-Content result.txt | Select-String -Pattern "Error") {
-          #   echo "Error occurred during Lambda invocation"
-          #   exit 1  # Exit code 1 for failure
-          # }
+          if (Get-Content result.txt | Select-String -Pattern "Lambda function executed successfully") {           
+            exit 0
+          } else {
+            exit 1
+          }
