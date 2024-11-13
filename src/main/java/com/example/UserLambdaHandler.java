@@ -39,10 +39,9 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
         try {
             Thread.sleep(1000); // 5-second delay
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restore interrupt status
+            Thread.currentThread().interrupt();
             return "Error: Interrupted exception during processing.";
         }
-
 
         if (event == null || event.isEmpty()) {
             return errorResponse("Input JSON is missing.");
