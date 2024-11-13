@@ -8,7 +8,7 @@ import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
 public class UserLambdaHandler implements RequestHandler<Map<String, Object>, String> {
-    private static final int TIMEOUT_SECONDS = 5;
+    private static final int TIMEOUT_SECONDS = 1;
     private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
@@ -44,7 +44,7 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
 
     private String processRequest(Map<String, Object> event, Context context) {
         try {
-            Thread.sleep(1000); // 5-second delay
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException("Error: Interrupted exception during processing.");
