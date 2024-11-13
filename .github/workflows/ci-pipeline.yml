@@ -85,7 +85,11 @@ jobs:
       - name: Invoke Lambda function locally using SAM
         run: |
           # Run SAM local invoke and capture output
-          sam local invoke UserLambda --event event.json > result.txt
+          sam local invoke UserLambda --event event.json 
+          
+          # > result.txt
+          echo "Exit Code: $LASTEXITCODE"
+
 
           if ($LASTEXITCODE -ne 0) {
           echo "Error: Lambda invocation failed."
