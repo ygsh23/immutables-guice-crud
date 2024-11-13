@@ -90,6 +90,7 @@ jobs:
           # Check if SAM invocation failed (non-zero exit code)
           if ($?) {
             # No error
+            echo "Lambda invoked successfully !!!!!!!!!!!!!!!!!!!!!!!!!!!!!."
             echo "Lambda invoked successfully."
           } else {
             # Exit with code 1 if SAM invocation fails
