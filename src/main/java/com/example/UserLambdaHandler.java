@@ -55,6 +55,7 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
         }
 
         if (!event.containsKey("username")) {
+            System.exit(1);
             throw new IllegalArgumentException("Field 'username' is required.");
         }
         String username = event.get("username").toString().trim();
