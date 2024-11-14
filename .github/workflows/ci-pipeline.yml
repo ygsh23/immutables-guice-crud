@@ -84,34 +84,13 @@ jobs:
 
       - name: Invoke Lambda function locally using SAM
         run: |
-          # Run SAM local invoke and redirect output to a file
           sam local invoke UserLambda --event event.json > result.txt
 
-          # Display the output for debugging purposes
           Get-Content result.txt
 
-          if (Test-Path "result.txt") {
-            Write-Output "`result.txt` file exists."
-            Write-Output "Contents of `result.txt`:"
-            Get-Content result.txt
-          } else {
-            Write-Output "Error: `result.txt` file not found!"
-          }
-
-          
-
           if ((Get-Content result.txt | Out-String) -match "Lambda function executed successfully") {
-            Write-Output "Lambda execution succeeded."
             exit 0
           } else {
             Write-Output "Lambda execution failed."
             exit 1
           }
-
-          # if (Get-Content result.txt | Select-String -Quiet "Lambda function executed successfully") {
-          #   Write-Output "Lambda execution succeeded."
-          #   exit 0
-          # } else {
-          #   Write-Output "Lambda execution failed."
-          #   exit 1
-          # }
