@@ -90,7 +90,7 @@ jobs:
           # Display the output for debugging purposes
           Get-Content result.txt
 
-          if ((Get-Content result.txt) -match "Lambda function executed successfully") {
+          if (Get-Content result.txt | Select-String -Quiet "Lambda function executed successfully") {
             Write-Output "Lambda execution succeeded."
             exit 0
           } else {
