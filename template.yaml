@@ -9,4 +9,4 @@ Resources:
       Runtime: java17
       CodeUri: target/immutables-guice-crud-1.0-SNAPSHOT.jar
       MemorySize: 512
-      Timeout: 5
+      Timeout: 10
