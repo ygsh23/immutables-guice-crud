@@ -94,4 +94,3 @@ jobs:
             Write-Output "Lambda execution failed."
             exit 1
           }
-          
