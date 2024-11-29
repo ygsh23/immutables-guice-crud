@@ -4,57 +4,30 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import java.util.Map;
-import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 public class UserLambdaHandler implements RequestHandler<Map<String, Object>, String> {
-    private static final int TIMEOUT_SECONDS = 5;
     private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    private static final Gson gson = new Gson();
 
     @Override
     public String handleRequest(Map<String, Object> event, Context context) {
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-
-        Callable<String> task = () -> {
-            try {
-                return processRequest(event, context);
-            } catch (IllegalArgumentException e) {
-                return errorResponse(e.getMessage());
-            }
-        };
-
-        Future<String> future = executorService.submit(task);
-        String result;
-
-        try {
-            result = future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            result = errorResponse("The request timed out. Please try again later.");
-            context.getLogger().log("TimeoutException: " + e.getMessage());
-        } catch (Exception e) {
-            result = errorResponse("An unexpected error occurred.");
-            context.getLogger().log("Exception: " + e.getMessage());
-        } finally {
-            executorService.shutdown();
-        }
-
-        return result;
-    }
-
-    private String processRequest(Map<String, Object> event, Context context) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException("Error: Interrupted exception during processing.");
-        }
-
-        if (event == null || event.isEmpty()) {
+        if (event != null && event.containsKey("body")) {
+            return apiGatewayResponse(event, context);
+        } else if (event != null && !event.isEmpty()) {
+            return lambdaFunctionResponse(event, context);
+        } else {
             throw new IllegalArgumentException("Input JSON is missing.");
         }
+    }
 
+    private String lambdaFunctionResponse(Map<String, Object> event, Context context) {
         if (!event.containsKey("username")) {
+            System.exit(1);
             throw new IllegalArgumentException("Field 'username' is required.");
         }
         String username = event.get("username").toString().trim();
@@ -82,10 +55,12 @@ public class UserLambdaHandler implements RequestHandler<Map<String, Object>, St
         String welcomeMessage = "Welcome, " + username + "! A confirmation email has been sent to " + email + ".";
         context.getLogger().log(welcomeMessage);
 
-        return "Lambda function executed successfully";
+        return welcomeMessage;
     }
 
-    private String errorResponse(String message) {
-        return "Error: " + message;
+    private String apiGatewayResponse(Map<String, Object> event, Context context) {
+        String body = event.get("body").toString();
+        Map<String, Object> parsedBody = gson.fromJson(body, new TypeToken<Map<String, Object>>() {}.getType());
+        return lambdaFunctionResponse(parsedBody, context);
     }
 }
